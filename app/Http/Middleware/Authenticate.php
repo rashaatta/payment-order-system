@@ -19,7 +19,6 @@ class Authenticate extends Middleware
 
     public function handle($request, Closure $next, ...$guards)
     {
-        //        dd($this->auth->guard($guards[0])->guest());
         if ($this->auth->guard($guards[0])->guest()) {
             $status = Response::HTTP_UNAUTHORIZED;
             $data = [

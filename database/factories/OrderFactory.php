@@ -21,6 +21,7 @@ class OrderFactory extends Factory
             'quantity' => $this->faker->numberBetween(1, 10),
             'price' => $this->faker->randomFloat(2, 10, 999),
             'status' => $this->faker->randomElement(['Pending', 'Paid', 'Canceled']),
+            'user_id' => 1,
         ];
     }
 }

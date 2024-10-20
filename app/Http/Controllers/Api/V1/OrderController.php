@@ -8,12 +8,27 @@ use App\Http\Requests\UpdateOrderStatusRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
+    public function index(Request $request)
+    {
+        $filters = $request->only(['status']);
+        $user = auth()->guard('api')->user();
+
+        $orders = $user->orders()
+            ->when($filters['status'], function ($query) use ($filters) {
+                $query->where('status', $filters['status']);
+            })->get();
+
+        return OrderResource::collection($orders);
+    }
+
     public function createOrder(OrderRequest $request)
     {
-        $order = Order::create($request->validated());
+        $user = auth()->guard('api')->user();
+        $order = $user->orders()->create($request->validated());
 
         return new OrderResource($order->refresh());
     }
@@ -21,7 +36,7 @@ class OrderController extends Controller
     public function updateStatus(UpdateOrderStatusRequest $request, $id)
     {
         $order = Order::find($id);
-        if (! $order) {
+        if (!$order) {
             return response()->json(['error' => 'Order not found.'], 404);
         }
 
@@ -30,13 +45,4 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function listOrders(Request $request)
-    {
-        $filters = $request->only(['status']);
-        $orders = Order::when($filters['status'], function ($query) use ($filters) {
-            $query->where('status', $filters['status']);
-        })->get();
-
-        return OrderResource::collection($orders);
-    }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\WebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,20 +19,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('login', LoginController::class);
+
 Route::get('pay', function () {
     return view('pay');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/orders', [OrderController::class, 'createOrder']);
-    Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
-    Route::get('/orders', [OrderController::class, 'listOrders']);
+Route::prefix('orders')->middleware(['auth:api'])->group(function () {
+    Route::get('/', [OrderController::class, 'index']);
+    Route::post('/', [OrderController::class, 'createOrder']);
+    Route::patch('/{id}/status', [OrderController::class, 'updateStatus']);
 });
 
 Route::post('/orders/{id}/pay', [PaymentController::class, 'processPayment']);
 Route::post('/payment/webhook', [WebhookController::class, 'handleWebhook']);
+
+Route::post('login', LoginController::class);
