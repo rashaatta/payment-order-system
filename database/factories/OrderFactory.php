@@ -20,7 +20,7 @@ class OrderFactory extends Factory
             'product_name' => $this->faker->text(20),
             'quantity' => $this->faker->numberBetween(1, 10),
             'price' => $this->faker->randomFloat(2, 10, 999),
-            'status' =>  $this->faker->randomElement(['Pending', 'Paid', 'Canceled']),
+            'status' => $this->faker->randomElement(['Pending', 'Paid', 'Canceled']),
         ];
     }
 }

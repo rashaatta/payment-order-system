@@ -17,7 +17,7 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // Corrected logic to check if the user exists and if the password is correct
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
                 'error' => 'Invalid credentials.',
             ], 422);
@@ -29,5 +29,4 @@ class LoginController extends Controller
             'access_token' => $user->createToken($device)->plainTextToken,
         ]);
     }
-
 }

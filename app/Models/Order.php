@@ -20,7 +20,7 @@ class Order extends Model
     public function status(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ,
+            get: fn ($value) => $value,
         );
     }
 }

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-
-
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -33,12 +31,13 @@ class WebhookController extends Controller
                     $this->updateOrderStatus($paymentIntent['metadata']['order_id'], 'Canceled');
                     break;
                 default:
-                    Log::info('Unhandled event type: ' . $event['type']);
+                    Log::info('Unhandled event type: '.$event['type']);
             }
 
             return response()->json(['status' => 'success']);
         } catch (\Exception $e) {
-            Log::error('Webhook handling error: ' . $e->getMessage());
+            Log::error('Webhook handling error: '.$e->getMessage());
+
             return response()->json(['error' => 'Webhook handling failed'], 500);
         }
     }

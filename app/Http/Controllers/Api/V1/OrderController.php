@@ -14,17 +14,19 @@ class OrderController extends Controller
     public function createOrder(OrderRequest $request)
     {
         $order = Order::create($request->validated());
+
         return new OrderResource($order->refresh());
     }
 
     public function updateStatus(UpdateOrderStatusRequest $request, $id)
     {
         $order = Order::find($id);
-        if (!$order) {
+        if (! $order) {
             return response()->json(['error' => 'Order not found.'], 404);
         }
 
         $order->update(['status' => $request->validated()['status']]);
+
         return new OrderResource($order);
     }
 
@@ -38,4 +40,3 @@ class OrderController extends Controller
         return OrderResource::collection($orders);
     }
 }
-

@@ -24,6 +24,7 @@ class PaymentService
                     'order_id' => $order->id,
                 ],
             ]);
+
             return $paymentIntent->client_secret;
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);

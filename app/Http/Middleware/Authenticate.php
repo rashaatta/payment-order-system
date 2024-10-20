@@ -17,17 +17,16 @@ class Authenticate extends Middleware
         return $request->expectsJson() ? null : route('login');
     }
 
-
     public function handle($request, Closure $next, ...$guards)
     {
-//        dd($this->auth->guard($guards[0])->guest());
+        //        dd($this->auth->guard($guards[0])->guest());
         if ($this->auth->guard($guards[0])->guest()) {
             $status = Response::HTTP_UNAUTHORIZED;
             $data = [
-                "success" => false,
-                "status" => $status,
-                "error_message" => 'Unauthorized.',
-                'errors' => ''
+                'success' => false,
+                'status' => $status,
+                'error_message' => 'Unauthorized.',
+                'errors' => '',
             ];
 
             return response($data, $status);

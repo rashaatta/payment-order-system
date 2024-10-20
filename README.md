@@ -1,66 +1,125 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Payment and Order Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is a Laravel-based API for managing orders and payments, integrated with the Stripe payment gateway.
 
-## About Laravel
+## Features
+- Create, update, and retrieve orders.
+- Process payments using the Stripe payment gateway.
+- Webhook to handle payment status updates (successful/failed payments).
+- JWT-based authentication and role-based access control (RBAC).
+- Security features like rate-limiting, data validation, and adherence to PCI DSS standards.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requirements
+- PHP 8.x
+- Composer
+- Laravel 10.x
+- Stripe API keys
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Setup Instructions
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Step 1: Clone the repository
+```bash
+git clone https://github.com/rashaatta/payment-order-system.git
+cd payment-order-system
+```
 
-## Learning Laravel
+### Step 2: Install dependencies
+```bash
+composer install
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Step 3: Set up environment variables
+1. Copy the `.env.example` to `.env`:
+    ```bash
+    cp .env.example .env
+    ```
+2. Update the following environment variables in your `.env` file:
+    ```bash
+    APP_NAME=PaymentOrderSystem
+    APP_ENV=local
+    APP_KEY=base64:...
+    APP_DEBUG=true
+    APP_URL=http://localhost
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=your_database
+    DB_USERNAME=your_username
+    DB_PASSWORD=your_password
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    STRIPE_KEY=your_stripe_public_key
+    STRIPE_SECRET=your_stripe_secret_key
+    ```
 
-## Laravel Sponsors
+### Step 4: Generate application key
+```bash
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Step 5: Run database migrations
+```bash
+php artisan migrate
+```
 
-### Premium Partners
+### Step 6: Start the local development server
+```bash
+php artisan serve
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+The API will now be running at `http://127.0.0.1:8000`.
 
-## Contributing
+## Payment Gateway Integration (Stripe)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+This application integrates with the Stripe payment gateway. You need to provide your Stripe API keys in the `.env` file.
 
-## Code of Conduct
+### Payment Flow
+1. User places an order with product details (Product Name, Quantity, Price).
+2. Payment is processed via Stripe when the order is created.
+3. Stripe webhook updates the order status based on payment success or failure.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Webhook Setup
+To receive payment updates from Stripe, set up a webhook in your Stripe Dashboard to point to:
+```
+http://yourdomain.com/api/v1//payment/webhook
+```
+## Payment Form
+```
+http://localhost:8000/api/v1/pay
+```
+Here is a preview of the payment form that the user interacts with:
 
-## Security Vulnerabilities
+![Payment Form](public/payment-form.png)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+Make sure to handle this in production by securing the endpoint and verifying the webhook signature.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## API Documentation
+- You can explore the API endpoints using Postman or Swagger.
+- A Postman collection is included in the repository under `postman_collection.json`.
+
+### Endpoints:
+- `POST /api/v1/orders`: Create an order.
+- `GET /api/v1/orders`: Get a list of orders.
+- `PATCH /api/v1/orders/{id}`: Update an order's status.
+- `POST /api/v1/orders/27/pay`: Process payments.
+
+Authentication is required for all API endpoints, using JWT tokens.
+
+## Running Tests
+
+To run the test suite, use:
+```bash
+php artisan test
+```
+ 
+## Security
+
+- API endpoints are secured with JWT authentication. 
+## Postman Collection
+
+To test the API endpoints, you can import the Postman collection provided in the project. Follow the steps below:
+
+1. Download the Postman collection file: [Postman Collection](payment-order-system.postman_collection.json)
+2. Open Postman, go to "Collections" on the left-hand side, and click "Import."
+3. Upload the `payment-order-system.postman_collection.json` file

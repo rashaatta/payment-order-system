@@ -6,7 +6,6 @@ namespace Database\Seeders;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,7 +17,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create(
             [
                 'name' => 'Rasha Atta',
-                'email' => 'rashaatta83@gmail.com'
+                'email' => 'rashaatta83@gmail.com',
             ]
         );
 
