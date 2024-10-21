@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\WebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,11 +28,17 @@ Route::get('pay', function () {
     return view('pay');
 });
 
-Route::prefix('orders')->group(function () {
-    Route::middleware(['auth:api'])->group(function () {
-        Route::get('/', [OrderController::class, 'index']);
-        Route::post('/', [OrderController::class, 'createOrder']);
-        Route::patch('/{id}/status', [OrderController::class, 'updateStatus']);
+
+Route::middleware(['auth:api', 'throttle:60,1'])->group(function () {
+
+    Route::prefix('orders')->middleware(['role:customer'])->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->middleware('permission:view orders');
+        Route::post('/', [OrderController::class, 'createOrder'])->middleware('permission:create orders');
+        Route::patch('/{id}/status', [OrderController::class, 'updateStatus'])->middleware('permission:view orders');
+    });
+
+    Route::prefix('admin')->middleware(['role:admin'])->group(function () {
+        Route::get('orders', [AdminOrderController::class, 'index'])->middleware('permission:view all orders');
     });
 
     Route::post('/{id}/pay', [PaymentController::class, 'processPayment']);
