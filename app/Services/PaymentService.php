@@ -17,7 +17,7 @@ class PaymentService
     {
         try {
             $paymentIntent = PaymentIntent::create([
-                'amount' => intval($order->price * 100),
+                'amount' => intval($order->quantity * $order->price * 100),
                 'currency' => 'usd',
                 'payment_method_types' => ['card'],
                 'metadata' => [

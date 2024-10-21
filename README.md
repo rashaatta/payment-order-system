@@ -102,7 +102,7 @@ Make sure to handle this in production by securing the endpoint and verifying th
 - `POST /api/v1/orders`: Create an order.
 - `GET /api/v1/orders`: Get a list of orders.
 - `PATCH /api/v1/orders/{id}`: Update an order's status.
-- `POST /api/v1/orders/27/pay`: Process payments.
+- `POST /api/v1/orders/{id}/pay`: Process payments.
 
 Authentication is required for all API endpoints, using JWT tokens.
 
