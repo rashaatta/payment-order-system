@@ -35,7 +35,8 @@ class OrderController extends Controller
 
     public function updateStatus(UpdateOrderStatusRequest $request, $id)
     {
-        $order = Order::find($id);
+        $user = auth()->guard('api')->user();
+        $order = $user->orders()->find($id);
         if (!$order) {
             return response()->json(['error' => 'Order not found.'], 404);
         }

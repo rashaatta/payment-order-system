@@ -87,12 +87,12 @@
         event.preventDefault();
 
         // Call your backend to create a PaymentIntent and get the clientSecret
-        const response = await fetch('https://3b73-41-45-220-75.ngrok-free.app/api/v1/orders/27/pay', {
+        const response = await fetch('https://434d-41-45-220-75.ngrok-free.app/api/v1/orders/20/pay', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ amount: 5000 }), // Example amount in cents
+            body: {},
         });
 
         const { clientSecret } = await response.json();
@@ -102,7 +102,7 @@
             payment_method: {
                 card: cardElement,
                 billing_details: {
-                    name: 'Customer Name', // Add customer name or any other details you need
+                    name: 'Rasha Atta',
                 },
             },
         });

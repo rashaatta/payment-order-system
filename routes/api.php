@@ -28,13 +28,16 @@ Route::get('pay', function () {
     return view('pay');
 });
 
-Route::prefix('orders')->middleware(['auth:api'])->group(function () {
-    Route::get('/', [OrderController::class, 'index']);
-    Route::post('/', [OrderController::class, 'createOrder']);
-    Route::patch('/{id}/status', [OrderController::class, 'updateStatus']);
+Route::prefix('orders')->group(function () {
+    Route::middleware(['auth:api'])->group(function () {
+        Route::get('/', [OrderController::class, 'index']);
+        Route::post('/', [OrderController::class, 'createOrder']);
+        Route::patch('/{id}/status', [OrderController::class, 'updateStatus']);
+    });
+
+    Route::post('/{id}/pay', [PaymentController::class, 'processPayment']);
+    Route::post('/webhook', [WebhookController::class, 'handleWebhook']);
 });
 
-Route::post('/orders/{id}/pay', [PaymentController::class, 'processPayment']);
-Route::post('/payment/webhook', [WebhookController::class, 'handleWebhook']);
 
 Route::post('login', LoginController::class);
