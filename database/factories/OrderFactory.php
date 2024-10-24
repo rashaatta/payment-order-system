@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,7 @@ class OrderFactory extends Factory
             'quantity' => $this->faker->numberBetween(1, 10),
             'price' => $this->faker->randomFloat(2, 10, 999),
             'status' => $this->faker->randomElement(['Pending', 'Paid', 'Canceled']),
-            'user_id' => 1,
+            'user_id' => User::factory(),
         ];
     }
 }
